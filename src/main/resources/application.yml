@@ -2,7 +2,7 @@
 
 amazon:
   dynamodb:
-    endpoint: ${AWS_DYNAMODB_ENDPOINT}
+    endpoint: "http://localhost:8000"
   aws:
-    accesskey: ${AWS_ACCESSKEY}
-    secretkey: ${AWS_SECRETKEY}
+    accesskey: "fakeMyKeyId"
+    secretkey: "fakeSecretAccessKey"

@@ -17,18 +17,19 @@ import org.springframework.stereotype.Component
 @EnableDynamoDBRepositories
 class DynamoDBConfiguration {
 //    https://blog.csdn.net/achenyuan/article/details/81332882
-companion object{
+companion object {
     private const val AMAZONDYNAMODBENDPOINT: String = ""
 
 
     private const val AMAZONAWSACCESSKEY: String=""
 
-    private const val AMAZONAWSSECRETKEY: String=""  }
+    private const val AMAZONAWSSECRETKEY: String=""
+}
 @Autowired
     fun setMyShit(
     @Value("\${amazon.dynamodb.endpoint}") amazonDynamoDBEndpoint: String= AMAZONDYNAMODBENDPOINT,
     @Value("\${amazon.aws.accesskey}") amazonAWSAccessKey: String= AMAZONAWSACCESSKEY,
-    @Value("\${amazon.aws.secretkey}")amazonAWSSecretKey: String= AMAZONAWSSECRETKEY,
+    @Value("\${amazon.aws.secretkey}") amazonAWSSecretKey: String= AMAZONAWSSECRETKEY,
 
     ) {
       DynamoDBConfiguration
