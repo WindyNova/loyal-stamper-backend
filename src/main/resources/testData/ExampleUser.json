@@ -3,6 +3,7 @@
     {
       "PutRequest": {
         "Item": {
+          "Id": {"S": "exampleId"},
           "username": {"S": "exampleUsername"},
           "email": {"S": "exampleEmail"},
           "password": {"S": "examplePassword"}
