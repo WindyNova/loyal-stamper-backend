@@ -1,8 +1,15 @@
-
+spring:
+  data:
+    dynamodb:
+      entity2ddl:
+        # creates tables if they don't already exist
+        # https://github.com/derjust/spring-data-dynamodb/wiki/Autocreate-Tables#Creation
+        auto: create-only
 
 amazon:
   dynamodb:
     endpoint: "http://localhost:8000"
   aws:
-    accesskey: "fakeMyKeyId"
-    secretkey: "fakeSecretAccessKey"
+    accessKey: "fakeMyKeyId"
+    secretKey: "fakeSecretAccessKey"
+    region: "eu-west-2"

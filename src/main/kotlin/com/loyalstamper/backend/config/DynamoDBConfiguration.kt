@@ -1,56 +1,44 @@
 package com.loyalstamper.backend.config
 
-import cn.hutool.core.util.StrUtil
-import com.amazonaws.auth.AWSCredentials
+import com.amazonaws.auth.AWSStaticCredentialsProvider
 import com.amazonaws.auth.BasicAWSCredentials
+import com.amazonaws.client.builder.AwsClientBuilder
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig
 import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.stereotype.Component
+import org.springframework.context.annotation.Primary
 
-@Component
 @Configuration
-@EnableDynamoDBRepositories
-class DynamoDBConfiguration {
-//    https://blog.csdn.net/achenyuan/article/details/81332882
-companion object {
-    private const val AMAZONDYNAMODBENDPOINT: String = ""
+@EnableDynamoDBRepositories("com.loyalstamper.backend.dynamo.repositories.UserRepository")
+class DynamoDBConfig(
+    @Value("\${amazon.dynamodb.endpoint}") private val endpoint: String,
+    @Value("\${amazon.aws.accessKey}") private val accessKey: String,
+    @Value("\${amazon.aws.secretKey}") private val secretKey: String,
+    @Value("\${amazon.aws.region}") private val region: String
+) {
 
-
-    private const val AMAZONAWSACCESSKEY: String=""
-
-    private const val AMAZONAWSSECRETKEY: String=""
-}
-@Autowired
-    fun setMyShit(
-    @Value("\${amazon.dynamodb.endpoint}") amazonDynamoDBEndpoint: String= AMAZONDYNAMODBENDPOINT,
-    @Value("\${amazon.aws.accesskey}") amazonAWSAccessKey: String= AMAZONAWSACCESSKEY,
-    @Value("\${amazon.aws.secretkey}") amazonAWSSecretKey: String= AMAZONAWSSECRETKEY,
-
-    ) {
-      DynamoDBConfiguration
+    @Primary
+    @Bean
+    fun dynamoDBMapper(amazonDynamoDB: AmazonDynamoDB): DynamoDBMapper {
+        return DynamoDBMapper(amazonDynamoDB, DynamoDBMapperConfig.DEFAULT)
     }
-
 
     @Bean
     fun amazonDynamoDB(): AmazonDynamoDB {
-        val amazonDynamoDB
-                : AmazonDynamoDB = AmazonDynamoDBClient(amazonAWSCredentials())
-
-        if (!StrUtil.isEmpty(AMAZONDYNAMODBENDPOINT)) {
-            amazonDynamoDB.setEndpoint(AMAZONDYNAMODBENDPOINT)
-        }
-
-        return amazonDynamoDB
-        }
-        @Bean
-        fun amazonAWSCredentials(): AWSCredentials {
-            return BasicAWSCredentials(
-                AMAZONAWSACCESSKEY, AMAZONAWSSECRETKEY
-            )
-        }
+        val awsCredentials = BasicAWSCredentials(accessKey, secretKey)
+        val awsCredentialsProvider = AWSStaticCredentialsProvider(awsCredentials)
+        val endpointConfiguration = AwsClientBuilder.EndpointConfiguration(endpoint, region)
+        return AmazonDynamoDBClientBuilder.standard()
+            .withCredentials(awsCredentialsProvider)
+            .withEndpointConfiguration(endpointConfiguration)
+            .build()
     }
+
+    @Bean
+    fun awsCredentials() = BasicAWSCredentials(accessKey, secretKey)
+}
