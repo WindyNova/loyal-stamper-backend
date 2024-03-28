@@ -1,13 +1,13 @@
 {
-  "id": 1,
-  "username": "exampleUsername",
-  "email": "exampleEmail",
-  "password": "examplePassword",
-  "loyaltyCards": {
-    "id": 1,
-    "businessName": "exampleBusinessName",
-    "businessAddress": "exampleBusinessAddress",
-    "currentStamps": 4,
-    "maxStamps": 10
-  }
+  "User": [
+    {
+      "PutRequest": {
+        "Item": {
+          "username": {"S": "exampleUsername"},
+          "email": {"S": "exampleEmail"},
+          "password": {"S": "examplePassword"}
+        }
+      }
+    }
+  ]
 }

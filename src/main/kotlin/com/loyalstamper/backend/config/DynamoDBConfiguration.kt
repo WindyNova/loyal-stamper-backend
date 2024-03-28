@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Primary
 
 @Configuration
 @EnableDynamoDBRepositories("com.loyalstamper.backend.dynamo.repositories.UserRepository")
-class DynamoDBConfig(
+class DynamoDBConfiguration(
     @Value("\${amazon.dynamodb.endpoint}") private val endpoint: String,
     @Value("\${amazon.aws.accessKey}") private val accessKey: String,
     @Value("\${amazon.aws.secretKey}") private val secretKey: String,
